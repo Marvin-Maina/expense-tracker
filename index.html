@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/34011a6aa6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+   
+        
+        <nav class="bg-gray-900/30 backdrop-blur-lg  border-b border-gray-200/30 bg-opacity-100 text-white p-4 shadow-md sticky top-0 z-50 flex justify-between items-center">
+            <div class="text-lg font-bold flex items-center">
+                <img src="assets/GetApp _ Find & Compare Business Software.png" alt="logo" class="w-8 h-8  mr-2">
+                Expense tracker
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="" class="hover:text-blue-300">Home</a>
+                <a href="#transaction_card" class="hover:text-blue-300">Transactions</a>
+                <a href="#expenseChart" class="hover:text-blue-300">Reports</a>
+                <a href="#currency" class="hover:text-blue-300">Converter</a>
+                <a href="profile.html" class="hover:text-blue-300">Profile</a>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden text-white text-2xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+        </nav>
+
+        <div id="mobileMenu" class="hidden bg-gray-900/30 backdrop-blur-lg  border-b border-gray-200/30 bg-opacity-100 text-white p-4 flex flex-col space-y-3">
+            <a href="" class="hover:text-blue-300">Home</a>
+                <a href="#transaction_card" class="hover:text-blue-300">Transactions</a>
+                <a href="#expenseChart" class="hover:text-blue-300">Reports</a>
+                <a href="#currency" class="hover:text-blue-300">Converter/a>
+                <a href="" class="hover:text-blue-300">Profile</a> 
+        </div>
+        <script src="menu.js"></script>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Initial Balance (Kshs)</label>
+            <input type="number" id="initialBalanceInput" class="w-full p-2 rounded border border-yellow-500 text-gray-900">
+            <button id="setInitialBalanceBtn" class="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-all duration-300 w-full">
+                Set Initial Balance
+            </button>
+        </div>
+
+        <div id="transaction_card" class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-[1.02]">
+            <h2 class="text-xl font-bold mb-4">Add Transaction</h2>
+            <form id="transactionsForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <input type="text" id="description" class="w-full p-2 rounded border focus:ring focus:ring-yellow-400 text-gray-900">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Amount (Kshs)</label>
+                    <input type="number" id="amount" class="w-full p-2 rounded border focus:ring focus:ring-yellow-400 text-gray-900">
+                </div>
+                <label for="transactionType" class="text-gray-700">Type:</label>
+<select id="transactionType" class="border p-2 text-gray-900">
+    <option value="expense">Expense</option>
+    <option value="income">Income</option>
+</select>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                    <select id="category" class="w-full p-2 border rounded focus:ring focus:ring-yellow-400 text-gray-900">
+                        <option value="Food">Food</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700 transform transition-all duration-200 hover:scale-105">Add Transaction</button>
+            </form>
+            <div class="mt-6 text-lg font-semibold text-gray-900">
+                Total Balance: <span id="totalBalance">Kshs 0.00</span>
+            </div>
+        </div>
+        <!-- Transactions Table -->
+        <div class="max-w-3xl mx-auto mt-6 p-6 bg-white rounded-lg shadow-md">
+            <h2 class="text-xl font-bold">Transactions</h2>
+            <table class="w-full mt-4 border-collapse border border-gray-300 rounded-lg overflow-hidden">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700">
+                        <th class="border p-2">Description</th>
+                        <th class="border p-2">Amount</th>
+                        <th class="border p-2">Category</th>
+                        <th class="border p-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsBody"></tbody>
+            </table>
+        </div>
+        <!-- Currency Converter -->
+        <div class="max-w-3xl mx-auto mt-6 p-6 bg-white rounded-lg shadow-lg transition-all duration-300 hover:scale-[1.02]">
+            <h2 class="text-xl font-bold">Currency Converter</h2>
+            <div class="flex space-x-4">
+                <select id="currency" class="w-full p-2 border rounded focus:ring focus:ring-green-400 text-gray-900">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="KES" selected>KES</option>
+                </select>
+                <button id="convertCurrency" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transform transition-all duration-200 hover:scale-105">Convert</button>
+            </div>
+            <p class="mt-4 text-lg text-gray-900">Converted Balance: <span id="convertedBalance">-</span></p>
+        </div>
+        <div class="bg-white shadow-md rounded-lg p-4 mt-6">
+            <h2 class="text-xl font-semibold mb-4"> Spending overview</h2>
+
+          <div class="chart-container">  <canvas id="expenseChart"></canvas></div>
+        </div>
+
+        <footer class="bg-gray-800 text-white text-center py-4 mt-10">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+                    <div>
+                    <h3 class="text-lg font-semibold mb-2">FAQ</h3>
+                    <ul class="text-sm">
+                        <li <a href="" class="relative inline-block hover:underline hover:scale-105 transition-transform duration-200"></a>How does it work?</li>
+                        <li  <a href="" class="relative inline-block hover:underline hover:scale-105 transition-transform duration-200"></a>Is it free?</li>
+                        <li  <a href="" class="relative inline-block hover:underline hover:scale-105 transition-transform duration-200"></a>Can I export my data?</li>
+                    </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Follow us</h3>
+                        <div class="flex justify-center md:justify-start space-x-4">
+                            <a href="" class="transform hover:scale-110 transition-transform duration-200"><i class="fab fa-facebook"></i></a>
+                            <a href="" class="transform hover:scale-110 transition-transform duration-200"><i class="fab fa-twitter"></i></a>
+                            <a href="" class="transform hover:scale-110 transition-transform duration-200"><i class="fab fa-instagram"></i></a>
+                            <a href="" class="transform hover:scale-110 transition-transform duration-200"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Subscrbe to our newsletter</h3>
+                        <form>
+                            <input type="email" placeholder="Enter your email" class="w-full p-2 rounded text-gray-900">
+                            <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded transition-all duration-300 hover:bg-blue-700 hover:scale-105">Subscribe</button>
+
+                        </form>
+                    </div>
+                </div>
+                <div class="text-center text-sm mt-6 border-t border-gray-600 pt-4">
+                    &copy; 2025 Expense Tracker. All rights reserved.
+                </div>
+            </div>
+        </footer>
+        <script src="script.js"></script>
+      
+    </body>
+
+
+</html>
+
